@@ -17,10 +17,11 @@ public class Main {
         } else {
             int max = 0;
             while (num != 0) {
-                if (max < num % 10) {
-                    max = num % 10;
+                int digit = num % 10;
+                if (max < digit) {
+                    max = digit;
                 } else {
-                    num = num / 10;
+                    num /= 10;
                 }
             }
             return max;
