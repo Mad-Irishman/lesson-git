@@ -1,5 +1,6 @@
-package AssemblyLine;
+package AssemblyLine.impl;
 
+import AssemblyLine.IAssemblyLine;
 import LineStep.ILineStep;
 import Product.IProduct;
 

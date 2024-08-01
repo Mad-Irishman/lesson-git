@@ -1,11 +1,11 @@
 import AssemblyLine.IAssemblyLine;
-import AssemblyLine.LaptopAssemblyLine;
-import LineStep.CaseStep;
+import AssemblyLine.impl.LaptopAssemblyLine;
+import LineStep.impl.CaseStep;
 import LineStep.ILineStep;
-import LineStep.MonitorStep;
-import LineStep.MotherboardStep;
+import LineStep.impl.MonitorStep;
+import LineStep.impl.MotherboardStep;
 import Product.IProduct;
-import Product.Laptop;
+import Product.impl.Laptop;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,8 +14,14 @@ public class Main {
         ILineStep monitorStep = new MonitorStep();
 
         IAssemblyLine assemblyLine = new LaptopAssemblyLine(caseStep, motherboardStep, monitorStep);
-        IProduct laptop = new Laptop();
 
-        assemblyLine.assembleProduct(laptop);
+        IProduct laptop = new Laptop(
+                caseStep.buildProductPart(),
+                motherboardStep.buildProductPart(),
+                monitorStep.buildProductPart()
+        );
+
+        IProduct assembledLaptop = assemblyLine.assembleProduct(laptop);
+        System.out.println(assembledLaptop.getDescription());
     }
 }
