@@ -2,19 +2,25 @@ package autoservice.models;
 
 import java.time.LocalDateTime;
 
+
 public class Order {
-    private static int idCounter = 0;
-    private int idOrder;
-    private boolean isCompleted;
+    private static int idOrder = 0;
+    private OrderStatus statusOrder;
     private String description;
     private Master assignedMaster;
     private GaragePlace assignedGaragePlace;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
+    public enum OrderStatus {
+        CREATED,
+        COMPLETED,
+        CANCELLED
+    }
+
     public Order(String description, Master assignedMaster, GaragePlace assignedGaragePlace, LocalDateTime startTime, int durationInHours) {
-        this.idOrder = ++idCounter;
-        this.isCompleted = false;
+        this.idOrder++;
+        this.statusOrder = OrderStatus.CREATED;
         this.description = description;
         this.assignedMaster = assignedMaster;
         this.assignedGaragePlace = assignedGaragePlace;
@@ -23,19 +29,19 @@ public class Order {
     }
 
     public int getIdOrder() {
-        return idOrder;
+        return this.idOrder;
     }
 
-    public boolean isCompleted() {
-        return isCompleted;
+    public OrderStatus getStatusOrder() {
+        return this.statusOrder;
     }
 
-    public void setCompleted(boolean completed) {
-        isCompleted = completed;
+    public void setStatusOrder(OrderStatus statusOrder) {
+        this.statusOrder = statusOrder;
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -43,15 +49,15 @@ public class Order {
     }
 
     public Master getAssignedMaster() {
-        return assignedMaster;
+        return this.assignedMaster;
     }
 
     public GaragePlace getAssignedGaragePlace() {
-        return assignedGaragePlace;
+        return this.assignedGaragePlace;
     }
 
     public LocalDateTime getStartTime() {
-        return startTime;
+        return this.startTime;
     }
 
     public void setStartTime(LocalDateTime startTime) {
@@ -59,7 +65,7 @@ public class Order {
     }
 
     public LocalDateTime getEndTime() {
-        return endTime;
+        return this.endTime;
     }
 
     public void setEndTime(LocalDateTime endTime) {
@@ -68,7 +74,7 @@ public class Order {
 
     @Override
     public String toString() {
-        return String.format("Order{idOrder=%d, isCompleted=%b, description='%s', assignedMaster=%s, assignedGaragePlace=%s, startTime=%s, endTime=%s}",
-                idOrder, isCompleted, description, assignedMaster.getName(), assignedGaragePlace.getPlaceNumber(), startTime, endTime);
+        return String.format("Order{idOrder=%d, statusOrder=%s, description='%s', assignedMaster=%s, assignedGaragePlace=%s, startTime=%s, endTime=%s}",
+                idOrder, statusOrder, description, assignedMaster.getName(), assignedGaragePlace.getPlaceNumber(), startTime, endTime);
     }
 }

@@ -1,5 +1,7 @@
-package autoservice.manager;
+package autoservice.manager.impl;
 
+import autoservice.manager.ServiceManagerInterface;
+import autoservice.models.Garage;
 import autoservice.models.GaragePlace;
 import autoservice.models.Master;
 import autoservice.models.Order;
@@ -8,14 +10,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceManager {
+public class ServiceManager implements ServiceManagerInterface {
     private List<Master> masters;
-    private List<GaragePlace> garagePlaces;
+    private Garage garage;
     private List<Order> orders;
 
     public ServiceManager() {
         this.masters = new ArrayList<>();
-        this.garagePlaces = new ArrayList<>();
+        this.garage = new Garage();
         this.orders = new ArrayList<>();
     }
 
@@ -33,16 +35,12 @@ public class ServiceManager {
     }
 
     public void addGaragePlace(GaragePlace garagePlace) {
-        garagePlaces.add(garagePlace);
+        garage.addGaragePlace(garagePlace);
     }
 
     public void removeGaragePlace(GaragePlace garagePlace) {
-        if (garagePlaces.contains(garagePlace)) {
-            garagePlaces.remove(garagePlace);
-            System.out.println("Garage place removed: " + garagePlace);
-        } else {
-            System.out.println("Garage place not found: " + garagePlace);
-        }
+        garage.removeGaragePlace(garagePlace);
+        System.out.println("Garage place removed: " + garagePlace);
     }
 
     public void createOrder(String description, Master master, GaragePlace place, LocalDateTime startTime, int durationInHours) {
@@ -76,8 +74,8 @@ public class ServiceManager {
     }
 
     public void completeOrder(Order order) {
-        if (order != null && !order.isCompleted()) {
-            order.setCompleted(true);
+        if (order != null && order.getStatusOrder() == Order.OrderStatus.CREATED) {
+            order.setStatusOrder(Order.OrderStatus.COMPLETED);
             order.getAssignedMaster().setAvailable(true);
             order.getAssignedGaragePlace().setOccupied(false);
             System.out.println("Order completed: " + order);
@@ -87,27 +85,29 @@ public class ServiceManager {
     }
 
     public void cancelOrder(Order order) {
-        if (order != null && orders.contains(order)) {
+        if (order != null && orders.contains(order) && order.getStatusOrder() == Order.OrderStatus.CREATED) {
+            order.setStatusOrder(Order.OrderStatus.CANCELLED);
             order.getAssignedMaster().setAvailable(true);
             order.getAssignedGaragePlace().setOccupied(false);
-            orders.remove(order);
             System.out.println("Order cancelled: " + order);
         } else {
             System.out.println("Order not found: " + order);
         }
     }
 
-    public void adjustOrdersForDelay(Order delayedOrder, int delayInHours) {
+    public void adjustOrdersForDelay(int orderId, int delayInHours) {
+        Order delayedOrder = getOrderById(orderId);
         if (delayedOrder == null) {
-            System.out.println("Delayed order is null.");
+            System.out.println("Order with ID " + orderId + " not found.");
             return;
         }
+
         LocalDateTime newEndTime = delayedOrder.getEndTime().plusHours(delayInHours);
         delayedOrder.setEndTime(newEndTime);
         System.out.println("Order " + delayedOrder.getIdOrder() + " delayed. New end time: " + newEndTime);
 
         for (Order order : orders) {
-            if (order.getStartTime().isAfter(delayedOrder.getStartTime())) {
+            if (order.getStartTime().isAfter(delayedOrder.getEndTime())) {
                 LocalDateTime newStartTime = order.getStartTime().plusHours(delayInHours);
                 LocalDateTime newEstimatedEndTime = order.getEndTime().plusHours(delayInHours);
                 order.setStartTime(newStartTime);
@@ -135,7 +135,7 @@ public class ServiceManager {
 
     public void showAvailableGaragePlaces() {
         System.out.println("Available Garage Places:");
-        for (GaragePlace place : garagePlaces) {
+        for (GaragePlace place : garage.getAvailableGaragePlaces()) {
             if (!place.isOccupied()) {
                 System.out.println(place);
             }

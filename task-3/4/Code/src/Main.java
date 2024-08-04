@@ -1,4 +1,4 @@
-import autoservice.manager.ServiceManager;
+import autoservice.manager.impl.ServiceManager;
 import autoservice.models.GaragePlace;
 import autoservice.models.Master;
 
@@ -37,7 +37,7 @@ public class Main {
 
         manager.cancelOrder(manager.getOrderById(2));
 
-        manager.adjustOrdersForDelay(manager.getOrderById(1), 1);
+        manager.adjustOrdersForDelay(1, 1);
 
         manager.showAllOrders();
         manager.showAvailableMasters();
