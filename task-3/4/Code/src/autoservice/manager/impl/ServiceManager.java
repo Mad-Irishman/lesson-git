@@ -4,7 +4,8 @@ import autoservice.manager.ServiceManagerInterface;
 import autoservice.models.Garage;
 import autoservice.models.GaragePlace;
 import autoservice.models.Master;
-import autoservice.models.Order;
+import autoservice.models.order.Order;
+import autoservice.models.order.status.OrderStatus;
 
 
 import java.time.LocalDateTime;
@@ -12,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServiceManager implements ServiceManagerInterface {
-    private List<Master> masters;
-    private Garage garage;
-    private List<Order> orders;
+    private final List<Master> masters;
+    private final Garage garage;
+    private final List<Order> orders;
 
     public ServiceManager() {
         this.masters = new ArrayList<>();
@@ -85,8 +86,8 @@ public class ServiceManager implements ServiceManagerInterface {
     }
 
     public void completeOrder(Order order) {
-        if (order != null && order.getStatusOrder() == Order.OrderStatus.CREATED) {
-            order.setStatusOrder(Order.OrderStatus.COMPELETED);
+        if (order != null && order.getStatusOrder() == OrderStatus.CREATED) {
+            order.setStatusOrder(OrderStatus.COMPELETED);
             order.getAssignedMaster().setAvailable(true);
             order.getAssignedGaragePlace().setOccupied(false);
             System.out.println("Order completed: " + order);
@@ -96,8 +97,8 @@ public class ServiceManager implements ServiceManagerInterface {
     }
 
     public void cancelOrder(Order order) {
-        if (order != null && order.getStatusOrder() == Order.OrderStatus.CREATED && orders.contains(order)) {
-            order.setStatusOrder(Order.OrderStatus.CANCELLED);
+        if (order != null && order.getStatusOrder() == OrderStatus.CREATED && orders.contains(order)) {
+            order.setStatusOrder(OrderStatus.CANCELLED);
             order.getAssignedMaster().setAvailable(true);
             order.getAssignedGaragePlace().setOccupied(false);
             System.out.println("Order cancelled: " + order);

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Garage {
-    private List<GaragePlace> garagePlaces;
+    private final List<GaragePlace> garagePlaces;
 
     public Garage() {
         this.garagePlaces = new ArrayList<>();

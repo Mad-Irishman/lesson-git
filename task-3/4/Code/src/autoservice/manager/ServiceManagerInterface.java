@@ -2,7 +2,7 @@ package autoservice.manager;
 
 import autoservice.models.GaragePlace;
 import autoservice.models.Master;
-import autoservice.models.Order;
+import autoservice.models.order.Order;
 
 import java.time.LocalDateTime;
 

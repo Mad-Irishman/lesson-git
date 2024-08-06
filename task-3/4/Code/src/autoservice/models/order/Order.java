@@ -1,4 +1,8 @@
-package autoservice.models;
+package autoservice.models.order;
+
+import autoservice.models.GaragePlace;
+import autoservice.models.Master;
+import autoservice.models.order.status.OrderStatus;
 
 import java.time.LocalDateTime;
 
@@ -11,11 +15,7 @@ public class Order {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    public enum OrderStatus {
-        CREATED,
-        COMPELETED,
-        CANCELLED
-    }
+
 
     public Order(String discription, Master assignedMaster, GaragePlace assignedGaragePlace, LocalDateTime startTime, int durationInHours) {
         this.idOrder++;
