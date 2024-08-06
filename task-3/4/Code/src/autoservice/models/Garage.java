@@ -11,15 +11,11 @@ public class Garage {
     }
 
     public void addGaragePlace(GaragePlace place) {
-        garagePlaces.add(place);
+        this.garagePlaces.add(place);
     }
 
     public void removeGaragePlace(GaragePlace place) {
-        garagePlaces.remove(place);
-    }
-
-    public List<GaragePlace> getGaragePlaces() {
-        return garagePlaces;
+        this.garagePlaces.remove(place);
     }
 
     public List<GaragePlace> getAvailableGaragePlaces() {
@@ -30,10 +26,5 @@ public class Garage {
             }
         }
         return availablePlaces;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Garage{garagePlaces=%s}", garagePlaces);
     }
 }

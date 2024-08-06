@@ -20,12 +20,7 @@ public class GaragePlace {
         return this.isOccupied;
     }
 
-    public void setOccupied(boolean occupied) {
-        this.isOccupied = occupied;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("GaragePlace{placeNumber=%d, isOccupied=%b}", placeNumber, isOccupied);
+    public void setOccupied(boolean isOccupied) {
+        this.isOccupied = isOccupied;
     }
 }

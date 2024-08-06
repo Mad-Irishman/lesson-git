@@ -6,6 +6,7 @@ import autoservice.models.GaragePlace;
 import autoservice.models.Master;
 import autoservice.models.Order;
 
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,34 +22,41 @@ public class ServiceManager implements ServiceManagerInterface {
         this.orders = new ArrayList<>();
     }
 
+
     public void addMaster(Master master) {
-        masters.add(master);
+        this.masters.add(master);
     }
 
+
     public void removeMaster(Master master) {
-        if (masters.contains(master)) {
-            masters.remove(master);
-            System.out.println("Master removed: " + master);
+        if (master.isAvailable()) {
+            this.masters.remove(master);
         } else {
-            System.out.println("Master not found: " + master);
+            System.out.println("It is impossible to delete a master because he has an order");
         }
     }
 
+
     public void addGaragePlace(GaragePlace garagePlace) {
-        garage.addGaragePlace(garagePlace);
+        this.garage.addGaragePlace(garagePlace);
     }
 
+
     public void removeGaragePlace(GaragePlace garagePlace) {
-        garage.removeGaragePlace(garagePlace);
-        System.out.println("Garage place removed: " + garagePlace);
+        if (!garagePlace.isOccupied()) {
+            this.garage.removeGaragePlace(garagePlace);
+        } else {
+            System.out.println("It is impossible to delete a place because the order is there");
+        }
     }
+
 
     public void createOrder(String description, Master master, GaragePlace place, LocalDateTime startTime, int durationInHours) {
         if (master.isAvailable() && !place.isOccupied()) {
             Order order = new Order(description, master, place, startTime, durationInHours);
             orders.add(order);
-            master.setAvailable(false);
-            place.setOccupied(true);
+            order.getAssignedMaster().setAvailable(false);
+            order.getAssignedGaragePlace().setOccupied(true);
             System.out.println("Order created: " + order);
         } else {
             System.out.println("Master or place is not available for order creation.");
@@ -65,8 +73,11 @@ public class ServiceManager implements ServiceManagerInterface {
         return null;
     }
 
+
     public void removeOrder(Order order) {
         if (orders.remove(order)) {
+            order.getAssignedMaster().setAvailable(true);
+            order.getAssignedGaragePlace().setOccupied(false);
             System.out.println("Order removed: " + order);
         } else {
             System.out.println("Order not found: " + order);
@@ -75,7 +86,7 @@ public class ServiceManager implements ServiceManagerInterface {
 
     public void completeOrder(Order order) {
         if (order != null && order.getStatusOrder() == Order.OrderStatus.CREATED) {
-            order.setStatusOrder(Order.OrderStatus.COMPLETED);
+            order.setStatusOrder(Order.OrderStatus.COMPELETED);
             order.getAssignedMaster().setAvailable(true);
             order.getAssignedGaragePlace().setOccupied(false);
             System.out.println("Order completed: " + order);
@@ -85,7 +96,7 @@ public class ServiceManager implements ServiceManagerInterface {
     }
 
     public void cancelOrder(Order order) {
-        if (order != null && orders.contains(order) && order.getStatusOrder() == Order.OrderStatus.CREATED) {
+        if (order != null && order.getStatusOrder() == Order.OrderStatus.CREATED && orders.contains(order)) {
             order.setStatusOrder(Order.OrderStatus.CANCELLED);
             order.getAssignedMaster().setAvailable(true);
             order.getAssignedGaragePlace().setOccupied(false);
@@ -107,7 +118,7 @@ public class ServiceManager implements ServiceManagerInterface {
         System.out.println("Order " + delayedOrder.getIdOrder() + " delayed. New end time: " + newEndTime);
 
         for (Order order : orders) {
-            if (order.getStartTime().isAfter(delayedOrder.getEndTime())) {
+            if (order.getIdOrder() != delayedOrder.getIdOrder()) {
                 LocalDateTime newStartTime = order.getStartTime().plusHours(delayInHours);
                 LocalDateTime newEstimatedEndTime = order.getEndTime().plusHours(delayInHours);
                 order.setStartTime(newStartTime);
@@ -141,4 +152,5 @@ public class ServiceManager implements ServiceManagerInterface {
             }
         }
     }
+
 }

@@ -24,9 +24,4 @@ public class Master {
     public void setAvailable(boolean available) {
         this.isAvailable = available;
     }
-
-    @Override
-    public String toString() {
-        return String.format("Master{name='%s', isAvailable=%b}", name, isAvailable);
-    }
 }
