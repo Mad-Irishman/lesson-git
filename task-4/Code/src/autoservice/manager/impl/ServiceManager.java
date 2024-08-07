@@ -23,7 +23,6 @@ public class ServiceManager implements ServiceManagerInterface {
         this.garage = new Garage();
         this.garages = new ArrayList<>();
         this.garages.add(garage);
-        //Можно попробовать тут же добавлять объект типа Garage в ArrayLlist<>(); а сам List<> сделать типо GaragePlaces
         this.orders = new ArrayList<>();
     }
 
@@ -41,8 +40,8 @@ public class ServiceManager implements ServiceManagerInterface {
 
     public List<Master> getMastersByOrders(Order order) {
         List<Master> orderMasters = new ArrayList<>();
-        for (Master master: masters) {
-            if (master.getOrdersMaster() != null ) {
+        for (Master master : masters) {
+            if (master.getOrdersMaster() != null) {
                 orderMasters.add(master);
             }
         }
@@ -60,9 +59,7 @@ public class ServiceManager implements ServiceManagerInterface {
             System.out.println("It is impossible to delete a place because the order is there");
         }
     }
-
-    //Реализовать эту пизду
-    //тут 3 места а гараж один и сам цикл ходит именно по гаражам и он не знает что там есть еще свободные места
+    
     public List<GaragePlace> getAvailableGaragePlaces() {
         List<GaragePlace> availablePlaces = new ArrayList<>();
         for (Garage garage : garages) {
@@ -73,7 +70,7 @@ public class ServiceManager implements ServiceManagerInterface {
     }
 
     public void createOrder(String description, Master master, GaragePlace place, LocalDateTime startTime,
-            int durationInHours) {
+                            int durationInHours) {
         if (master.isAvailable() && !place.isOccupied()) {
             Order order = new Order(description, master, place, startTime, durationInHours);
             orders.add(order);
@@ -88,7 +85,7 @@ public class ServiceManager implements ServiceManagerInterface {
 
     public List<Order> getOrdersByMaster(Master master) {
         List<Order> masterOrders = new ArrayList<>();
-        for (Order order: orders) {
+        for (Order order : orders) {
             if (order.getAssignedMaster().equals(master)) {
                 masterOrders.add(order);
             }
