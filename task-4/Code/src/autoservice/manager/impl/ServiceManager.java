@@ -13,12 +13,17 @@ import java.util.List;
 
 public class ServiceManager implements ServiceManagerInterface {
     private final List<Master> masters;
-    private final Garage garages;
+    private final Garage garage;
+    private final List<Garage> garages;
     private final List<Order> orders;
+
 
     public ServiceManager() {
         this.masters = new ArrayList<>();
-        this.garages = new Garage();
+        this.garage = new Garage();
+        this.garages = new ArrayList<>();
+        this.garages.add(garage);
+        //Можно попробовать тут же добавлять объект типа Garage в ArrayLlist<>(); а сам List<> сделать типо GaragePlaces
         this.orders = new ArrayList<>();
     }
 
@@ -45,17 +50,19 @@ public class ServiceManager implements ServiceManagerInterface {
     }
 
     public void addGaragePlace(GaragePlace garagePlace) {
-        this.garages.addGaragePlace(garagePlace);
+        this.garage.addGaragePlace(garagePlace);
     }
 
     public void removeGaragePlace(GaragePlace garagePlace) {
         if (!garagePlace.isOccupied()) {
-            this.garages.removeGaragePlace(garagePlace);
+            this.garage.removeGaragePlace(garagePlace);
         } else {
             System.out.println("It is impossible to delete a place because the order is there");
         }
     }
 
+    //Реализовать эту пизду
+    //тут 3 места а гараж один и сам цикл ходит именно по гаражам и он не знает что там есть еще свободные места
     public List<GaragePlace> getAvailableGaragePlaces() {
         List<GaragePlace> availablePlaces = new ArrayList<>();
         for (Garage garage : garages) {
@@ -175,7 +182,7 @@ public class ServiceManager implements ServiceManagerInterface {
 
     public void showAvailableGaragePlaces() {
         System.out.println("Available Garage Places:");
-        for (GaragePlace place : garages.getAvailableGaragePlaces()) {
+        for (GaragePlace place : garage.getAvailableGaragePlaces()) {
             if (!place.isOccupied()) {
                 System.out.println(place);
             }
