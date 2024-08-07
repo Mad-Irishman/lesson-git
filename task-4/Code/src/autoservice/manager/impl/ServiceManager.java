@@ -9,6 +9,7 @@ import autoservice.models.order.status.OrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ServiceManager implements ServiceManagerInterface {
@@ -48,6 +49,12 @@ public class ServiceManager implements ServiceManagerInterface {
         return orderMasters;
     }
 
+    public List<Master> getMastersSortedByAvailabilityAndName() {
+        List<Master> sortedMasters = new ArrayList<>(masters);
+        sortedMasters.sort(Comparator.comparing(Master::isAvailable).reversed().thenComparing(Master::getName));
+        return sortedMasters;
+    }
+
     public void addGaragePlace(GaragePlace garagePlace) {
         this.garage.addGaragePlace(garagePlace);
     }
@@ -59,7 +66,7 @@ public class ServiceManager implements ServiceManagerInterface {
             System.out.println("It is impossible to delete a place because the order is there");
         }
     }
-    
+
     public List<GaragePlace> getAvailableGaragePlaces() {
         List<GaragePlace> availablePlaces = new ArrayList<>();
         for (Garage garage : garages) {

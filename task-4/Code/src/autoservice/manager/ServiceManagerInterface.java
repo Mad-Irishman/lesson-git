@@ -18,6 +18,8 @@ public interface ServiceManagerInterface {
 
     List<Master> getMastersByOrders(Order order);
 
+    List<Master> getMastersSortedByAvailabilityAndName();
+
     List<GaragePlace> getAvailableGaragePlaces();
 
     void createOrder(String description, Master master, GaragePlace place, LocalDateTime startTime, int durationInHours);
