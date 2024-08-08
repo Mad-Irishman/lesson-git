@@ -1,11 +1,10 @@
 import autoservice.manager.impl.ServiceManager;
-import autoservice.models.Garage;
 import autoservice.models.GaragePlace;
 import autoservice.models.Master;
 import autoservice.models.order.Order;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -13,30 +12,20 @@ public class Main {
 
         Master master1 = new Master("John Doe");
         Master master2 = new Master("Jane Smith");
-        Master master3 = new Master("Alice Johnson");
 
         GaragePlace place1 = new GaragePlace(1);
         GaragePlace place2 = new GaragePlace(2);
-        Garage garage = new Garage();
-        garage.addGaragePlace(place1);
-        garage.addGaragePlace(place2);
 
+        manager.createOrder("Rebuild the motor", master2, place2, LocalDateTime.of(2024, 7, 28, 9, 0),
+                LocalDateTime.of(2024, 7, 29, 14, 0),
+                LocalDateTime.of(2024, 7, 29, 8, 0),
+                450.00);
 
-        manager.addMaster(master1);
-        manager.addMaster(master2);
-        manager.addMaster(master3);
+        manager.createOrder("Change Oil", master1, place1, LocalDateTime.of(2024, 7, 29, 12, 0), LocalDateTime.of(2024, 7, 30, 15, 0),
+                LocalDateTime.of(2024, 7, 30, 10, 0), 500.00);
 
-        LocalDateTime startTime1 = LocalDateTime.now().plusHours(1);
-        LocalDateTime startTime2 = LocalDateTime.now().plusHours(2);
+        manager.sortListOrders();
 
-        manager.createOrder("Change oil", master1, place1, startTime1, 2);
-        manager.createOrder("Fix brakes", master2, place2, startTime2, 3);
-
-        System.out.println("Masters sorted by availability and name:");
-        List<Master> mastersSortedByAvailabilityAndName = manager.getMastersSortedByAvailabilityAndName();
-        for (Master master : mastersSortedByAvailabilityAndName) {
-            System.out.println(master.getName());
-        }
     }
 }
 

@@ -76,10 +76,9 @@ public class ServiceManager implements ServiceManagerInterface {
         return availablePlaces;
     }
 
-    public void createOrder(String description, Master master, GaragePlace place, LocalDateTime startTime,
-                            int durationInHours) {
-        if (master.isAvailable() && !place.isOccupied()) {
-            Order order = new Order(description, master, place, startTime, durationInHours);
+    public void createOrder(String discription, Master assignedMaster, GaragePlace assignedGaragePlace, LocalDateTime submissionDate, LocalDateTime completionDate, LocalDateTime plannedStartDate, double price) {
+        if (assignedMaster.isAvailable() && !assignedGaragePlace.isOccupied()) {
+            Order order = new Order(discription, assignedMaster, assignedGaragePlace, submissionDate, completionDate, plannedStartDate, price);
             orders.add(order);
             order.getAssignedMaster().setAvailable(false);
             order.getAssignedMaster().assingOrderMaster(order);
@@ -152,20 +151,29 @@ public class ServiceManager implements ServiceManagerInterface {
             return;
         }
 
-        LocalDateTime newEndTime = delayedOrder.getEndTime().plusHours(delayInHours);
-        delayedOrder.setEndTime(newEndTime);
-        System.out.println("Order " + delayedOrder.getIdOrder() + " delayed. New end time: " + newEndTime);
+        LocalDateTime newCompletionDate = delayedOrder.getCompletionDate().plusHours(delayInHours);
+        delayedOrder.setCompletionDate(newCompletionDate);
+        System.out.println("Order " + delayedOrder.getIdOrder() + " delayed. New end time: " + newCompletionDate);
 
         for (Order order : orders) {
             if (order.getIdOrder() != delayedOrder.getIdOrder()) {
-                LocalDateTime newStartTime = order.getStartTime().plusHours(delayInHours);
-                LocalDateTime newEstimatedEndTime = order.getEndTime().plusHours(delayInHours);
-                order.setStartTime(newStartTime);
-                order.setEndTime(newEstimatedEndTime);
+                LocalDateTime newStartTime = order.getSubmissionDate().plusHours(delayInHours);
+                LocalDateTime newEstimatedEndTime = order.getCompletionDate().plusHours(delayInHours);
+                order.setSubmissionDate(newStartTime);
+                order.setCompletionDate(newEstimatedEndTime);
                 System.out.println("Order " + order.getIdOrder() + " adjusted. New start time: " + newStartTime
                         + ", New end time: " + newEstimatedEndTime);
             }
         }
+    }
+
+    public List<Order> sortListOrders() {
+        List<Order> sortOrders = new ArrayList<>(orders);
+        sortOrders.sort(Comparator.comparing(Order::getSubmissionDate)
+                .thenComparing(Order::getCompletionDate)
+                .thenComparing(Order::getPlannedStartDate)
+                .thenComparing(Order::getPrice));
+        return sortOrders;
     }
 
     public void showAllOrders() {

@@ -22,7 +22,7 @@ public interface ServiceManagerInterface {
 
     List<GaragePlace> getAvailableGaragePlaces();
 
-    void createOrder(String description, Master master, GaragePlace place, LocalDateTime startTime, int durationInHours);
+    void createOrder(String discription, Master assignedMaster, GaragePlace assignedGaragePlace, LocalDateTime submissionDate, LocalDateTime completionDate, LocalDateTime plannedStartDate, double price);
 
     List<Order> getOrdersByMaster(Master master);
 
@@ -35,6 +35,8 @@ public interface ServiceManagerInterface {
     void cancelOrder(Order order);
 
     void adjustOrdersForDelay(int orderId, int delayInHours);
+
+    List<Order> sortListOrders();
 
     void showAllOrders();
 

@@ -12,19 +12,22 @@ public class Order {
     private Master assignedMaster;
     private GaragePlace assignedGaragePlace;
     private OrderStatus statusOrder;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalDateTime submissionDate;
+    private LocalDateTime completionDate;
+    private LocalDateTime plannedStartDate;
+    private double price;
 
 
-
-    public Order(String discription, Master assignedMaster, GaragePlace assignedGaragePlace, LocalDateTime startTime, int durationInHours) {
+    public Order(String discription, Master assignedMaster, GaragePlace assignedGaragePlace, LocalDateTime submissionDate, LocalDateTime completionDate, LocalDateTime plannedStartDate, double price) {
         this.idOrder++;
         this.discription = discription;
         this.statusOrder = OrderStatus.CREATED;
         this.assignedMaster = assignedMaster;
         this.assignedGaragePlace = assignedGaragePlace;
-        this.startTime = startTime;
-        this.endTime = startTime.plusHours(durationInHours);
+        this.submissionDate = submissionDate;
+        this.completionDate = completionDate;
+        this.plannedStartDate = plannedStartDate;
+        this.price = price;
 
     }
 
@@ -64,19 +67,35 @@ public class Order {
         this.assignedGaragePlace = assignedGaragePlace;
     }
 
-    public LocalDateTime getStartTime() {
-        return this.startTime;
+    public LocalDateTime getSubmissionDate() {
+        return this.submissionDate;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
+    public void setSubmissionDate(LocalDateTime submissionDate) {
+        this.submissionDate = submissionDate;
     }
 
-    public LocalDateTime getEndTime() {
-        return this.endTime;
+    public LocalDateTime getCompletionDate() {
+        return completionDate;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
+    public void setCompletionDate(LocalDateTime completionDate) {
+        this.completionDate = completionDate;
+    }
+
+    public LocalDateTime getPlannedStartDate() {
+        return plannedStartDate;
+    }
+
+    public void setPlannedStartDate(LocalDateTime plannedStartDate) {
+        this.plannedStartDate = plannedStartDate;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }
