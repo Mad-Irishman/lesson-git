@@ -24,8 +24,7 @@ public class Main {
         manager.createOrder("Change Oil", master1, place1, LocalDateTime.of(2024, 7, 29, 12, 0), LocalDateTime.of(2024, 7, 30, 15, 0),
                 LocalDateTime.of(2024, 7, 30, 10, 0), 500.00);
 
-        LocalDateTime checkDate = LocalDateTime.now().plusDays(1).plusHours(1);
-        int freePlaces = manager.getFreePlacesOnDate(checkDate);
+        LocalDateTime nearestFreeDate = manager.getNearestFreeDate();
 
     }
 }

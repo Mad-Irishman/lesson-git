@@ -27,4 +27,8 @@ public class Garage {
         }
         return availablePlaces;
     }
+
+    public List<GaragePlace> getGaragePlaces() {
+        return garagePlaces;
+    }
 }

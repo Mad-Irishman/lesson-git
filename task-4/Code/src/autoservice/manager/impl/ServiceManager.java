@@ -231,6 +231,46 @@ public class ServiceManager implements ServiceManagerInterface {
         return Math.min((int) freeMastersCount, (int) freePlacesCount);
     }
 
+    public LocalDateTime getNearestFreeDate() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime nearestFreeDate = now;
+
+        List<LocalDateTime> occupiedDates = orders.stream()
+                .flatMap(order -> List.of(order.getSubmissionDate(), order.getCompletionDate()).stream())
+                .sorted()
+                .collect(Collectors.toList());
+
+        for (LocalDateTime occupiedDate : occupiedDates) {
+            if (occupiedDate.isAfter(nearestFreeDate)) {
+                if (isFreeAt(occupiedDate)) {
+                    nearestFreeDate = occupiedDate;
+                    break;
+                }
+            }
+        }
+
+        return nearestFreeDate.isEqual(now) ? now.plusDays(1) : nearestFreeDate;
+    }
+
+    private boolean isFreeAt(LocalDateTime dateTime) {
+        boolean freeMasterExists = masters.stream()
+                .noneMatch(master -> orders.stream()
+                        .anyMatch(order -> order.getAssignedMaster().equals(master) &&
+                                order.getSubmissionDate().isBefore(dateTime) &&
+                                order.getCompletionDate().isAfter(dateTime))
+                );
+
+        boolean freePlaceExists = garages.stream()
+                .flatMap(garage -> garage.getGaragePlaces().stream())
+                .noneMatch(place -> orders.stream()
+                        .anyMatch(order -> order.getAssignedGaragePlace().equals(place) &&
+                                order.getSubmissionDate().isBefore(dateTime) &&
+                                order.getCompletionDate().isAfter(dateTime))
+                );
+
+        return freeMasterExists && freePlaceExists;
+    }
+
     public void showAllOrders() {
         System.out.println("All Orders:");
         for (Order order : orders) {

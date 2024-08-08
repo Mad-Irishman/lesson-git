@@ -47,6 +47,8 @@ public interface ServiceManagerInterface {
 
     int getFreePlacesOnDate(LocalDateTime date);
 
+    LocalDateTime getNearestFreeDate();
+
     void showAllOrders();
 
     void showAvailableMasters();
