@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ServiceManager implements ServiceManagerInterface {
     private final List<Master> masters;
@@ -174,6 +175,20 @@ public class ServiceManager implements ServiceManagerInterface {
                 .thenComparing(Order::getPlannedStartDate)
                 .thenComparing(Order::getPrice));
         return sortOrders;
+    }
+
+    public List<Order> getCurrentOrders() {
+        return orders.stream()
+                .filter(order -> order.getStatusOrder() == OrderStatus.IN_PROGRESS)
+                .collect(Collectors.toList());
+    }
+
+    public List<Order> getSortedCurrentOrders() {
+        return getCurrentOrders().stream()
+                .sorted(Comparator.comparing(Order::getSubmissionDate)
+                        .thenComparing(Order::getCompletionDate)
+                        .thenComparing(Order::getPrice))
+                .collect(Collectors.toList());
     }
 
     public void showAllOrders() {
