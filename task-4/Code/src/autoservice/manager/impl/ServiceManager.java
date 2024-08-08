@@ -7,6 +7,7 @@ import autoservice.models.Master;
 import autoservice.models.order.Order;
 import autoservice.models.order.status.OrderStatus;
 
+import java.sql.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -184,9 +185,21 @@ public class ServiceManager implements ServiceManagerInterface {
     }
 
     public List<Order> getSortedCurrentOrders() {
-        return getCurrentOrders().stream()
+        return (getCurrentOrders().stream()
                 .sorted(Comparator.comparing(Order::getSubmissionDate)
                         .thenComparing(Order::getCompletionDate)
+                        .thenComparing(Order::getPrice))
+                .collect(Collectors.toList()));
+    }
+
+    public List<Order> getOrdersByStatusAndTimeFrame(OrderStatus status, LocalDateTime startTime, LocalDateTime endTime) {
+        return orders.stream()
+                .filter(order -> order.getStatusOrder() == status &&
+                        (order.getCompletionDate() != null && !order.getCompletionDate().isBefore(startTime) && !order.getCompletionDate().isAfter(endTime)))
+                .sorted(Comparator
+                        .comparing(Order::getSubmissionDate)
+                        .thenComparing(Order::getCompletionDate)
+                        .thenComparing(Order::getPlannedStartDate)
                         .thenComparing(Order::getPrice))
                 .collect(Collectors.toList());
     }

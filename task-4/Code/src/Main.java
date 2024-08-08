@@ -1,7 +1,7 @@
 import autoservice.manager.impl.ServiceManager;
 import autoservice.models.GaragePlace;
 import autoservice.models.Master;
-import autoservice.models.order.Order;
+import autoservice.models.order.status.OrderStatus;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +24,9 @@ public class Main {
         manager.createOrder("Change Oil", master1, place1, LocalDateTime.of(2024, 7, 29, 12, 0), LocalDateTime.of(2024, 7, 30, 15, 0),
                 LocalDateTime.of(2024, 7, 30, 10, 0), 500.00);
 
-        manager.getSortedCurrentOrders();
+        LocalDateTime startTime = LocalDateTime.now().minusDays(7);
+        LocalDateTime endTime = LocalDateTime.now();
+        manager.getOrdersByStatusAndTimeFrame(OrderStatus.COMPELETED, startTime, endTime);
 
     }
 }

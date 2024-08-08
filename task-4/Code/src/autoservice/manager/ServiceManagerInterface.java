@@ -3,6 +3,7 @@ package autoservice.manager;
 import autoservice.models.GaragePlace;
 import autoservice.models.Master;
 import autoservice.models.order.Order;
+import autoservice.models.order.status.OrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,6 +38,12 @@ public interface ServiceManagerInterface {
     void adjustOrdersForDelay(int orderId, int delayInHours);
 
     List<Order> sortListOrders();
+
+    List<Order> getCurrentOrders();
+
+    List<Order> getSortedCurrentOrders();
+
+    List<Order> getOrdersByStatusAndTimeFrame(OrderStatus status, LocalDateTime startTime, LocalDateTime endTime);
 
     void showAllOrders();
 
