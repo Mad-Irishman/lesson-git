@@ -45,6 +45,8 @@ public interface ServiceManagerInterface {
 
     List<Order> getOrdersByStatusAndTimeFrame(OrderStatus status, LocalDateTime startTime, LocalDateTime endTime);
 
+    int getFreePlacesOnDate(LocalDateTime date);
+
     void showAllOrders();
 
     void showAvailableMasters();

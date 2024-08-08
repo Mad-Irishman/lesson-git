@@ -204,6 +204,33 @@ public class ServiceManager implements ServiceManagerInterface {
                 .collect(Collectors.toList());
     }
 
+    public int getFreePlacesOnDate(LocalDateTime date) {
+        List<Master> occupiedMasters = orders.stream()
+                .filter(order -> order.getStatusOrder() == OrderStatus.IN_PROGRESS || order.getStatusOrder() == OrderStatus.CREATED)
+                .filter(order -> order.getSubmissionDate().isBefore(date) && order.getCompletionDate().isAfter(date))
+                .map(Order::getAssignedMaster)
+                .distinct()
+                .collect(Collectors.toList());
+
+        List<GaragePlace> occupiedPlaces = orders.stream()
+                .filter(order -> order.getStatusOrder() == OrderStatus.IN_PROGRESS || order.getStatusOrder() == OrderStatus.CREATED)
+                .filter(order -> order.getSubmissionDate().isBefore(date) && order.getCompletionDate().isAfter(date))
+                .map(Order::getAssignedGaragePlace)
+                .distinct()
+                .collect(Collectors.toList());
+
+        long freeMastersCount = masters.stream()
+                .filter(master -> !occupiedMasters.contains(master))
+                .count();
+
+        long freePlacesCount = garages.stream()
+                .flatMap(garage -> garage.getAvailableGaragePlaces().stream())
+                .filter(place -> !occupiedPlaces.contains(place))
+                .count();
+
+        return Math.min((int) freeMastersCount, (int) freePlacesCount);
+    }
+
     public void showAllOrders() {
         System.out.println("All Orders:");
         for (Order order : orders) {

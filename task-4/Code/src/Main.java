@@ -24,9 +24,8 @@ public class Main {
         manager.createOrder("Change Oil", master1, place1, LocalDateTime.of(2024, 7, 29, 12, 0), LocalDateTime.of(2024, 7, 30, 15, 0),
                 LocalDateTime.of(2024, 7, 30, 10, 0), 500.00);
 
-        LocalDateTime startTime = LocalDateTime.now().minusDays(7);
-        LocalDateTime endTime = LocalDateTime.now();
-        manager.getOrdersByStatusAndTimeFrame(OrderStatus.COMPELETED, startTime, endTime);
+        LocalDateTime checkDate = LocalDateTime.now().plusDays(1).plusHours(1);
+        int freePlaces = manager.getFreePlacesOnDate(checkDate);
 
     }
 }
